@@ -26,32 +26,37 @@ def agent_init():
 
 def agent_start(this_observation): # returns NumPy array, this_observation: NumPy array
     global last_action
-    
+
     local_action = np.zeros(1)
     local_action[0] = rand_in_range(num_actions)
     last_action = local_action
+    #print "the initial guess is %d"%int(last_action[0])
     
-    return last_action
+    
+
+    return int(last_action[0])
 
 
 def agent_step(reward, this_observation): # returns NumPy array, reward: floating point, this_observation: NumPy array
-    global last_action
+    global last_action,Q
     local_action = np.zeros(1)
+    
     #update Q(At)
     Q[int(last_action[0])] +=  step_size * (reward-Q[int(last_action[0])])
-    
+
     #rand_in_range(10)>0 means 90% we go for greedy choice
     #rand_in_range(10)>=0 means 100% we go for greedy choice
     if rand_in_range(10)>=0:
         #choose the action with argmax Q(a)
         local_action[0] = float(max(enumerate(Q),key=lambda x: x[1])[0])
+        #print "Greedy action is %d"%int(local_action[0])
     else:
         local_action[0] = rand_in_range(num_actions)
-
+        #print "Not greedy action is %d"%int(local_action[0])
 
     last_action = local_action
 
-    return last_action
+    return int(last_action[0])
 
 def agent_end(reward): # reward: floating point
     # final learning update at end of episode

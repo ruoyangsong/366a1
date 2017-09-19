@@ -10,7 +10,7 @@
 """
 
 from rl_glue import *  # Required for RL-Glue
-RLGlue("w1_env", "w1_agent")
+RLGlue("simple_env", "simple_agent")
 
 import numpy as np
 import sys
@@ -26,24 +26,28 @@ if __name__ == "__main__":
 
     # array to store the results of each step
     optimal_action = np.zeros(max_steps)
-
+    
     print "\nPrinting one dot for every run: {0} total Runs to complete".format(num_runs)
     for k in range(num_runs):
         RL_init()
-
         RL_start()
+        
+        #check if the action is optimal
+        optimal = RL_env_message("get optimal action")
+        #print "optimal is %d"%optimal
+        
         for i in range(max_steps):
             # RL_step returns (reward, state, action, is_terminal); we need only the
             # action in this problem
             action = RL_step()[2]
-            #check if the action is optimal
-            optimal = RL_env_message("get optimal action")
             
-            if int(action[0])==optimal:
+            if action==optimal:
                 optimal_action[i] += 1
-            
+                
+
         RL_cleanup()
         print ".",
         sys.stdout.flush()
+
     save_results(optimal_action / num_runs, max_steps, "RL_EXP_OUT2.dat")
     print "\nDone"
