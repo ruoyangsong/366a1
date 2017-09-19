@@ -36,9 +36,9 @@ def env_step(this_action): # returns (floating point, NumPy array, Boolean), thi
     
     global this_reward_observation,real_reward,q
     
-    # rewards drawn from (q(At), 0.5) Gaussian , I did not use variance=1 since I want the agent get higher optimal possibility 
+    # rewards drawn from (q(At), 1) Gaussian
     for i in range(10):
-        real_reward[i] = rand_norm(q[i], 0.5)
+        real_reward[i] = rand_norm(q[i], 1)
     
     the_reward = real_reward[this_action]
     

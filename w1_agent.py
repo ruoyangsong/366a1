@@ -10,14 +10,31 @@
 
 from utils import rand_in_range
 import numpy as np
+import random
 
 last_action = None # last_action: NumPy array
 
 num_actions = 10
 
-Q = [5,5,5,5,5,5,5,5,5,5]
+q = 5
+
+epsilon = 0
+
+Q = [0,0,0,0,0,0,0,0,0,0]
 
 step_size = 0.1
+
+def get_greedy(Q):
+    old_Q = Q
+    Q = sorted(Q,reverse = True)
+    choices = []
+    for i in range(len(Q)):
+        if old_Q[i]==Q[0]:
+            choices.append(i)
+    #randomly choose from largest estimate actions
+    return random.choice(choices)
+    
+    
 
 def agent_init():
     global last_action
@@ -30,9 +47,10 @@ def agent_start(this_observation): # returns NumPy array, this_observation: NumP
     local_action = np.zeros(1)
     local_action[0] = rand_in_range(num_actions)
     last_action = local_action
-    #print "the initial guess is %d"%int(last_action[0])
     
-    
+    #initialize Q list
+    for i in range(10):
+        Q[i] = q
 
     return int(last_action[0])
 
@@ -43,16 +61,19 @@ def agent_step(reward, this_observation): # returns NumPy array, reward: floatin
     
     #update Q(At)
     Q[int(last_action[0])] +=  step_size * (reward-Q[int(last_action[0])])
-
-    #rand_in_range(10)>0 means 90% we go for greedy choice
-    #rand_in_range(10)>=0 means 100% we go for greedy choice
-    if rand_in_range(10)>=0:
-        #choose the action with argmax Q(a)
-        local_action[0] = float(max(enumerate(Q),key=lambda x: x[1])[0])
-        #print "Greedy action is %d"%int(local_action[0])
+    
+    #epsilon==0, we only choose greedy choice
+    if epsilon==0:
+        local_action[0] = get_greedy(Q)
     else:
-        local_action[0] = rand_in_range(num_actions)
-        #print "Not greedy action is %d"%int(local_action[0])
+        #rand_in_range(10)>0 means 90% agent goes for greedy choice
+        if rand_in_range(10)>0:
+            #choose the action with argmax Q(a)
+            local_action[0] = get_greedy(Q)
+        #10% agent choose from random
+        else:
+            local_action[0] = rand_in_range(num_actions)
+        
 
     last_action = local_action
 
