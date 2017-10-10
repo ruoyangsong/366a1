@@ -28,18 +28,18 @@ if __name__ == "__main__":
         v_over_runs[episode] = []
 
     for run in range(num_runs):
-      counter = 0
-      print "run number: ", run
-      RL_init()
-      print "\n"
-      for episode in range(num_episodes):
-        RL_episode(max_steps)
-        if (episode in key_episodes):
-          V = pickle.loads(RL_agent_message('ValueFunction'))
-          # V is (n,) np.array
-          v_over_runs[episode].append(V)
-          counter += 1
-      RL_cleanup()
+        counter = 0
+        print "run number: ", run
+        RL_init()
+        print "\n"
+        for episode in range(num_episodes):
+            RL_episode(max_steps)
+            if (episode in key_episodes):
+                V = pickle.loads(RL_agent_message('ValueFunction'))
+                # V is (n,) np.array
+                v_over_runs[episode].append(V)
+                counter += 1
+        RL_cleanup()
       
     n = v_over_runs[key_episodes[0]][0].shape[0]
     n_valueFunc = len(key_episodes)
