@@ -38,7 +38,7 @@ if __name__=="__main__":
     S = [i for i in range(1,100)]
     theta = 0.001
     #probability of get head
-    P = 0.25
+    P = 0.45
     (V,optimal)=value_iteration(S,theta,P)
     #show two graph
     plt.plot(V)
