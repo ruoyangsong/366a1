@@ -41,6 +41,8 @@ if __name__ == "__main__":
                 counter += 1
         RL_cleanup()
       
+      
+      
     n = v_over_runs[key_episodes[0]][0].shape[0]
     n_valueFunc = len(key_episodes)
     average_v_over_runs = np.zeros((n_valueFunc,n))

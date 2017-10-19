@@ -11,23 +11,34 @@ from utils import rand_in_range, rand_un
 import numpy as np
 import pickle
 
-def agent_init():
-    """
-    Hint: Initialize the variables that need to be reset before each run begins
-    Returns: nothing
-    """
+epsilon = 0.1
+alpha = 0.5
+Q = None
+num_total_row = 7 # num_total_rows: integer
+num_total_column = 10
+#a list of all action
+action=["up","down","left","right","upleft","upright","downleft","downright"]
 
+def epsilon_greedy(state,Q):
+    
+    #rand_in_range(10)>0 means 90% agent goes for greedy choice
+    if rand_in_range(10)>0:
+       
+        #10% agent choose from random
+    else:
+            
+    
+
+def agent_init():
     #initialize the policy array in a smart way
+    
+    Q = [[[0 for k in range(len(action))] for j in range(num_total_row)] for i in range[num_total_column]]
     
 
 def agent_start(state):
-    """
-    Hint: Initialize the variavbles that you want to reset before starting a new episode
-    Arguments: state: numpy array
-    Returns: action: integer
-    """
-    # pick the first action, don't forget about exploring starts 
-    return action
+    # pick the first action, pick a action from random
+    action_index = rand_in_range(len(action))
+    return action[action_index]
 
 
 def agent_step(reward, state): # returns NumPy array, reward: floating point, this_observation: NumPy array
