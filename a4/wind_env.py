@@ -51,33 +51,38 @@ def env_step(action):
         change[1] += 1
     elif action == "downleft":
         change[0]-= 1  
-        change[1] += 1
+        change[1] -= 1
     elif action == "downright":
         change[0]+= 1  
-        change[1] += 1  
+        change[1] -= 1  
     elif action=="ninth":
-        change[1] = change[1]
+        change[0] = 0
+        change[1] = 0
     else:
         print("unkown action")
         
     #if the it's still in the grid, we update the coordinates; otherwise, we let the point in the old coordinates
-    if [0]+change[0] in range(0,num_total_column) and current_state[1]+change[1] in range(0,num_total_row):
+    if current_state[0]+change[0] in range(0,num_total_column): 
         current_state[0] += change[0]
-        current_state[1] += change[1]
         
+    if current_state[1]+change[1] in range(0,num_total_row):
+        current_state[1] += change[1]
+      
     #add the effect of the wind
     current_state[1]+=wind[current_state[0]]
     
     #check if the wind blow the point out of the grid or not
     if current_state[1] not in range(0,num_total_row):
         current_state[1]-= wind[current_state[0]]
-        
+      
+    #print current_state  
     reward = -1
     is_terminal = False
     
     #if get the goal,terminate with reward = 1; otherwise, keep itterating with reward = -1
     if np.array_equal(current_state,final_state):
         is_terminal = True
+        print("terminate")
         current_state = None
         reward = 0
 

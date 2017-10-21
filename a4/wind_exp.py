@@ -11,45 +11,35 @@
 
 from rl_glue import *  # Required for RL-Glue
 RLGlue("wind_env", "sarsa_agent")
-
-import numpy as np
-import pickle
+import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
-    num_episodes = 8000
-    max_steps = 10000
-
-    num_runs = 10
-    key_episodes = [99, 999, 7999]
-
-    v_over_runs={}
-    # dict to hold data for key episodes
-    for episode in key_episodes:
-        v_over_runs[episode] = []
-
-    for run in range(num_runs):
-        counter = 0
-        print "run number: ", run
-        RL_init()
-        print "\n"
-        for episode in range(num_episodes):
-            RL_episode(max_steps)
-            if (episode in key_episodes):
-                V = pickle.loads(RL_agent_message('ValueFunction'))
-                # V is (n,) np.array
-                v_over_runs[episode].append(V)
-                counter += 1
-        RL_cleanup()
+    max_episodes = 10000
+    max_steps = 8000
+    step=0
+    episode = 0
+    step_list=[]
+    episode_list=[]
+    RL_init()
+    while step<max_steps:
+        RL_episode(max_episodes)
+        step+=RL_num_steps()
+        episode = RL_num_episodes()
+        step_list.append(step)
+        episode_list.append(episode)
+        
+    plt.plot(step_list,episode_list)
+    plt.xlim([0,8000])
+    plt.xticks([0,1000,2000,3000,4000,5000,6000,7000])
+    plt.xlabel('Time steps')
+    plt.ylabel('Episodes')
+    plt.legend()
+    plt.show()   
+    
+        
+    
+   
       
       
       
-    n = v_over_runs[key_episodes[0]][0].shape[0]
-    n_valueFunc = len(key_episodes)
-    average_v_over_runs = np.zeros((n_valueFunc,n))
-    for i,episode in enumerate(key_episodes):
-        # each item in dict is a list (one item per run), and each item is a value function 
-        data = np.matrix(v_over_runs[episode])
-        # therefore data is (num_runs x length of value fucntion)
-        average_v_over_runs[i] = np.mean(data, axis=0)
-
-    np.save("ValueFunction", average_v_over_runs)
+   
